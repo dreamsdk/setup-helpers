@@ -11,7 +11,7 @@
         <CompatibilityMode Value="True"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="Where: Files Location Lister"/>
+      <Title Value="Files Location Lister"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -19,8 +19,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="6"/>
-      <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Where: Files Location Lister for DreamSDK" InternalName="whereis.exe" LegalCopyright="© Copyleft 2018-2022" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="whereis.exe" ProductName="DreamSDK" ProductVersion="3.0.4.2206"/>
+      <BuildNr Value="7"/>
+      <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Files Location Lister for DreamSDK" InternalName="whereis.exe" LegalCopyright="© Copyleft 2018-2022" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="whereis.exe" ProductName="DreamSDK" ProductVersion="3.0.4.2208"/>
     </VersionInfo>
     <BuildModes Count="2">
       <Item1 Name="Debug" Default="True"/>
