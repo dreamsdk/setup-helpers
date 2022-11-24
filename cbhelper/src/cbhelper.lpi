@@ -25,7 +25,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="132"/>
+      <BuildNr Value="133"/>
       <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Code::Blocks Patcher Helper for DreamSDK Setup" InternalName="cbhelper" LegalCopyright="© Copyleft 2018-2022" LegalTrademarks="Code::Blocks is distributed under the GNU GPL3. Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="cbhelper.exe" ProductName="DreamSDK" ProductVersion="3.0.4.2212"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -67,21 +67,24 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="--detect"/>
+        <CommandLineParams Value="--version &quot;C:\Program Files\CodeBlocks&quot;"/>
       </local>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="--detect"/>
+            <CommandLineParams Value="--version &quot;C:\Program Files\CodeBlocks&quot;"/>
           </local>
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="1">
+    <RequiredPackages Count="2">
       <Item1>
-        <PackageName Value="LazUtils"/>
+        <PackageName Value="LCL"/>
       </Item1>
+      <Item2>
+        <PackageName Value="LazUtils"/>
+      </Item2>
     </RequiredPackages>
     <Units Count="1">
       <Unit0>
