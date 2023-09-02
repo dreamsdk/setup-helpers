@@ -251,7 +251,7 @@ var
 begin
   Application := TCodeBlocksHelperApplication.Create(nil);
   try
-  Application.Title:='Code::Blocks Patcher Helper';
+    Application.Title := 'Code::Blocks Patcher Helper';
     Application.Run;
   finally
     Application.Free;
