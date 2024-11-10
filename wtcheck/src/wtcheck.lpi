@@ -19,7 +19,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="35"/>
+      <BuildNr Value="36"/>
       <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Windows Terminal Checker for DreamSDK" InternalName="wtcheck.exe" LegalCopyright="© Copyleft 2018-2023" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="wtcheck.exe" ProductName="DreamSDK" ProductVersion="3.0.4.2311"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -33,7 +33,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="..\..\..\..\common\src\sys;..\..\..\..\common\src"/>
+            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src"/>
             <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -83,7 +83,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\..\..\common\src\sys;..\..\..\..\common\src"/>
+      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src"/>
       <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

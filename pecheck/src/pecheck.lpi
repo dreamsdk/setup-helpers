@@ -19,7 +19,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="32"/>
+      <BuildNr Value="33"/>
       <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Portable Executable Checker for DreamSDK" InternalName="pecheck.exe" LegalCopyright="© Copyleft 2018-2023" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="pecheck.exe" ProductName="DreamSDK" ProductVersion="3.0.4.2311"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -83,7 +83,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\..\..\common\src\sys"/>
+      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys"/>
       <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

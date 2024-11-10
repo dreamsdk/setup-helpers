@@ -39,7 +39,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="..\..\..\..\common\src\sys;..\..\..\..\common\src;..\..\..\..\codeblocks-patcher\src\engine"/>
+            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src;..\..\..\..\modules\ide\codeblocks\src\engine"/>
             <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -102,7 +102,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\..\..\common\src\sys;..\..\..\..\common\src;..\..\..\..\codeblocks-patcher\src\engine"/>
+      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src;..\..\..\..\modules\ide\codeblocks\src\engine"/>
       <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
