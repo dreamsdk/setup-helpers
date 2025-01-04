@@ -33,7 +33,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src"/>
+            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys;..\..\..\..\modules\common\src;..\..\..\common\src"/>
             <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -83,7 +83,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src"/>
+      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys;..\..\..\..\modules\common\src;..\..\..\common\src"/>
       <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

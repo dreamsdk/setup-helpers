@@ -25,7 +25,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="139"/>
+      <BuildNr Value="141"/>
       <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Code::Blocks Patcher Helper for DreamSDK Setup" InternalName="cbhelper" LegalCopyright="© Copyleft 2018-2023" LegalTrademarks="Code::Blocks is distributed under the GNU GPL3. Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="cbhelper.exe" ProductName="DreamSDK" ProductVersion="3.0.4.2311"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -39,7 +39,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src;..\..\..\..\modules\ide\codeblocks\src\engine"/>
+            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys;..\..\..\..\modules\common\src;..\..\..\common\src;..\..\..\..\modules\ide\codeblocks\src\engine;..\..\..\codeblocks-patcher\src\engine"/>
             <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -102,7 +102,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\..\modules\common\src;..\..\..\..\modules\ide\codeblocks\src\engine"/>
+      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys;..\..\..\..\modules\common\src;..\..\..\common\src;..\..\..\..\modules\ide\codeblocks\src\engine;..\..\..\codeblocks-patcher\src\engine"/>
       <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
