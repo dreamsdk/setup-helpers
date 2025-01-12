@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="40"/>
+      <BuildNr Value="42"/>
       <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Windows Terminal Checker for DreamSDK" InternalName="wtcheck.exe" LegalCopyright="© Copyleft 2018-2025" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="wtcheck.exe" ProductName="DreamSDK" ProductVersion="3.0.5.2501"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -51,7 +51,8 @@
             <LinkSmart Value="True"/>
           </Linking>
           <Other>
-            <CustomOptions Value="-dRELEASE"/>
+            <CustomOptions Value="-dRELEASE
+-dDISABLE_REFBASE_WARNING"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -111,7 +112,8 @@
       </Debugging>
     </Linking>
     <Other>
-      <CustomOptions Value="-dDEBUG"/>
+      <CustomOptions Value="-dDEBUG
+-dDISABLE_REFBASE_WARNING"/>
     </Other>
   </CompilerOptions>
 </CONFIG>
