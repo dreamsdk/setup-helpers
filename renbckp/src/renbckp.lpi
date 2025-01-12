@@ -19,7 +19,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="6"/>
+      <BuildNr Value="8"/>
       <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Rename Backup for DreamSDK" InternalName="renbckp.exe" LegalCopyright="© Copyleft 2018-2025" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="renbckp.exe" ProductName="DreamSDK" ProductVersion="3.0.5.2501"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -72,6 +72,7 @@
       <Unit0>
         <Filename Value="renbckp.lpr"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="RenBckp"/>
       </Unit0>
     </Units>
   </ProjectOptions>

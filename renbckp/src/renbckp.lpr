@@ -10,7 +10,8 @@ uses
 
 var
   ProgramName: string;
-  DirectoryFullPath: TFileName;
+  OldDirectoryFullPath,
+  NewDirectoryFullPath: TFileName;
 
 {$R *.res}
 
@@ -22,10 +23,16 @@ begin
     Exit;
   end;
 
-  DirectoryFullPath := ParamStr(1);
-  if RenameFileOrDirectoryAsBackup(DirectoryFullPath) then
+  OldDirectoryFullPath := ParamStr(1);
+  if RenameFileOrDirectoryAsBackup(OldDirectoryFullPath, NewDirectoryFullPath) then
+  begin
+    WriteLn('Target successfully renamed.');
+    WriteLn('  Old: "', OldDirectoryFullPath, '"');
+    WriteLn('  New: "', NewDirectoryFullPath, '"');
     Exit;
+  end;
 
+  WriteLn('Error: Unable to rename target: "', OldDirectoryFullPath, '".');
   ExitCode := -1;
 end.
 
