@@ -11,7 +11,7 @@
         <CompatibilityMode Value="True"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="Files Location Lister"/>
+      <Title Value="DreamSDK Setup Helper"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -19,9 +19,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="12"/>
-      <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Files Location Lister for DreamSDK" InternalName="whereis.exe" LegalCopyright="© Copyleft 2018-2025" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="whereis.exe" ProductName="DreamSDK" ProductVersion="3.0.5.2501"/>
+      <BuildNr Value="67"/>
+      <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Setup Helper for DreamSDK" InternalName="dreamsdk.dll" LegalCopyright="© Copyleft 2018-2025" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="dreamsdk.dll" ProductName="DreamSDK" ProductVersion="3.0.5.2504"/>
     </VersionInfo>
     <BuildModes Count="2">
       <Item1 Name="Debug" Default="True"/>
@@ -30,15 +29,16 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="..\bin\whereis"/>
+            <Filename Value="..\bin\dreamsdk"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys"/>
+            <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys;..\..\..\..\modules\common\src;..\..\..\common\src;..\..\..\..\modules\ide\codeblocks\src\engine;..\..\..\codeblocks-patcher\src\engine"/>
             <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
+            <RelocatableUnit Value="True"/>
             <TargetCPU Value="i386"/>
             <Optimizations>
               <OptimizationLevel Value="3"/>
@@ -47,13 +47,18 @@
           <Linking>
             <Debugging>
               <GenerateDebugInfo Value="False"/>
-              <DebugInfoType Value="dsDwarf2Set"/>
+              <RunWithoutDebug Value="True"/>
             </Debugging>
             <LinkSmart Value="True"/>
+            <Options>
+              <ExecutableType Value="Library"/>
+            </Options>
           </Linking>
           <Other>
             <CustomOptions Value="-dRELEASE
--dDISABLE_REFBASE_WARNING"/>
+-dDISABLE_REFBASE_WARNING
+-dLITE_VERSION
+-dHELPER"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -70,23 +75,33 @@
         <PackageName Value="LazUtils"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="1">
+    <Units Count="3">
       <Unit0>
-        <Filename Value="whereis.lpr"/>
+        <Filename Value="dreamsdk.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="WhereIs"/>
+        <UnitName Value="DreamSDK"/>
       </Unit0>
+      <Unit1>
+        <Filename Value="cbhelper.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CBHelper"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="helper.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Helper"/>
+      </Unit2>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\whereis"/>
+      <Filename Value="..\bin\dreamsdk"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys"/>
+      <OtherUnitFiles Value="..\..\..\..\modules\common\src\sys;..\..\..\common\src\sys;..\..\..\..\modules\common\src;..\..\..\common\src;..\..\..\..\modules\ide\codeblocks\src\engine;..\..\..\codeblocks-patcher\src\engine"/>
       <UnitOutputDirectory Value="..\lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
@@ -95,6 +110,7 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
+      <RelocatableUnit Value="True"/>
       <Checks>
         <IOChecks Value="True"/>
         <RangeChecks Value="True"/>
@@ -106,15 +122,33 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <DebugInfoType Value="dsDwarf2Set"/>
+        <DebugInfoType Value="dsDwarf3"/>
         <UseHeaptrc Value="True"/>
         <TrashVariables Value="True"/>
         <UseExternalDbgSyms Value="True"/>
       </Debugging>
+      <Options>
+        <ExecutableType Value="Library"/>
+      </Options>
     </Linking>
     <Other>
       <CustomOptions Value="-dDEBUG
--dDISABLE_REFBASE_WARNING"/>
+-dDISABLE_REFBASE_WARNING
+-dLITE_VERSION
+-dHELPER"/>
     </Other>
   </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
 </CONFIG>
