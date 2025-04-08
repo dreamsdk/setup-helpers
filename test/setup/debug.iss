@@ -43,14 +43,15 @@ end;
 
 // Destination Path [Support]
 #define AppSupportDirectoryName "support"
-#include "../src/inc/utils/utils.iss"
-#include "../src/inc/helpers/helperlib.iss"
+
+#include "../../../setup-generator/src/inc/utils/utils.iss"
+#include "../../../setup-generator/src/inc/helpers/helperlib.iss"
 
 procedure GetMessage(Buffer: AnsiString; BufSize: Integer);
-  external 'GetMessage@files:dreamsdk.dll stdcall';
+  external 'GetMessage@files:common.dll stdcall';
 
 procedure GetMessageW(Buffer: string; BufSize: Integer);
- external 'GetMessageW@files:dreamsdk.dll stdcall';
+ external 'GetMessageW@files:common.dll stdcall';
 
 function InitializeSetup(): Boolean;
 var
@@ -92,6 +93,6 @@ begin
   SetUninstallMode(True);  
 end;
 
-[Files]
-; Install helpers
-Source: "..\..\setup-helpers\bin\{#HelperLibraryFileName}"; DestDir: "{app}"; Flags: ignoreversion noencryption nocompression
+[Files]                                 
+Source: "..\..\cbhelper\bin\{#CodeBlocksHelperLibraryFileName}"; DestDir: "{app}"; Flags: ignoreversion noencryption nocompression
+Source: "..\..\common\bin\{#CommonHelperLibraryFileName}"; DestDir: "{app}"; Flags: ignoreversion noencryption nocompression

@@ -14,9 +14,9 @@ uses
 
 {$R *.res}
 
-function IsWindowsTerminalInstalledA: Boolean; stdcall;
+function IsWindowsTerminalInstalled: Boolean; stdcall;
 begin
-  Result := IsWindowsTerminalInstalled;
+  Result := WTTools.IsWindowsTerminalInstalled;
 end;
 
 function GetFileLocationsInSystemPathA(const lpFileName: PAnsiChar;
@@ -85,9 +85,9 @@ end;
 exports
   GetMessage,
   GetMessageW,
+  IsWindowsTerminalInstalled,
   GetFileLocationsInSystemPathA,
   GetPortableExecutableBitnessA,
-  IsWindowsTerminalInstalledA,
   RenameFileOrDirectoryAsBackupA;
 
 end.

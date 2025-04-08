@@ -19,7 +19,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="95"/>
+      <BuildNr Value="102"/>
       <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Common Helpers for DreamSDK Setup" InternalName="common.dll" LegalCopyright="© Copyleft 2018-2025" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="common.dll" ProductName="DreamSDK" ProductVersion="3.0.5.2504"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -40,6 +40,7 @@
             <SmartLinkUnit Value="True"/>
             <RelocatableUnit Value="True"/>
             <TargetCPU Value="i386"/>
+            <TargetOS Value="win32"/>
             <Optimizations>
               <OptimizationLevel Value="3"/>
             </Optimizations>
@@ -114,6 +115,7 @@
       </Checks>
       <VerifyObjMethodCallValidity Value="True"/>
       <TargetCPU Value="i386"/>
+      <TargetOS Value="win32"/>
     </CodeGeneration>
     <Linking>
       <Debugging>
