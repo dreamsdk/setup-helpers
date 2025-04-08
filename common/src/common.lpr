@@ -1,4 +1,4 @@
-library DreamSDK;
+library Common;
 
 {$mode objfpc}{$H+}
 
@@ -9,9 +9,8 @@ uses
   SysTools,
   FSTools,
   PEUtils,
-  WTTools,
-  CBHelper,
-  Helper;
+  SetupHlp,
+  WTTools;
 
 {$R *.res}
 
@@ -59,12 +58,33 @@ begin
   Result := Ord(Bitness);
 end;
 
+procedure GetMessage(Buffer: PAnsiChar; BufSize: Integer); stdcall;
+var
+  Msg: AnsiString; //UnicodeString;
+
+begin
+  if (Buffer = nil) or (BufSize <= 0) then Exit;
+  Msg := 'Bonjour depuis la DLL Unicode 🎉'; //  🎉
+  // FillChar(Buffer[0], BufSize, 0);
+  StrPLCopy(Buffer, PAnsiChar(Msg), Length(Msg));
+end;
+
+// https://stackoverflow.com/a/65401568
+procedure GetMessageW(Buffer: PWideChar; BufSize: Integer); stdcall;
+var
+  Msg: UnicodeString;
+
+begin
+  if (Buffer = nil) or (BufSize <= 0) then Exit;
+  Msg := 'xxxx_'#$04C5'_x_'#$30BA'_xx_'#$30A1'_xxxxxB'#$1F00'o'#$0100'__|';
+  StrPLCopy(Buffer, Msg, Length(Msg));
+  //  StrPCopy(Buffer, Msg);
+  MessageBoxW(0, PWideChar(Msg), 'DLL', 0);
+end;
+
 exports
-  CodeBlocksDetectInstallationPathA,
-  CodeBlocksDetectVersionA,
-  CodeBlocksGetAvailableUsersA,
-  CodeBlocksInitializeProfilesA,
-  CodeBlocksRemoveProfilesA,
+  GetMessage,
+  GetMessageW,
   GetFileLocationsInSystemPathA,
   GetPortableExecutableBitnessA,
   IsWindowsTerminalInstalledA,

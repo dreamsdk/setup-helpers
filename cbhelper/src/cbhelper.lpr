@@ -1,34 +1,22 @@
-unit CBHelper;
+library DreamSDK;
 
-{$mode ObjFPC}{$H+}
-
-interface
+{$mode objfpc}{$H+}
 
 uses
+  Windows,
   SysUtils,
-  Classes;
-
-function CodeBlocksGetAvailableUsersA(const lpDelimiter: AnsiChar;
-  lpAvailableUsers: PAnsiChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
-
-function CodeBlocksRemoveProfilesA: Boolean; stdcall;
-
-function CodeBlocksDetectInstallationPathA(lpInstallationPath: PAnsiChar;
-  const uBufferMaxSize: UInt32): UInt32; stdcall;
-
-function CodeBlocksDetectVersionA(const lpCodeBlocksInstallationDirectory: PAnsiChar;
-  lpCodeBlockVersion: PAnsiChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
-
-procedure CodeBlocksInitializeProfilesA; stdcall;
-
-implementation
-
-uses
+  Classes,
+  LazUTF8,
   SysTools,
+  FSTools,
+  PEUtils,
+  WTTools,
+  SetupHlp,
   Version,
   CBTools,
-  CBPatch,
-  Helper;
+  CBPatch;
+
+{$R *.res}
 
 (* Retrieve all Windows users that can use Code::Blocks in this system. *)
 function CodeBlocksGetAvailableUsersA(const lpDelimiter: AnsiChar;
@@ -42,6 +30,23 @@ begin
     GetCodeBlocksAvailableUsers(AvailableUsers);
     Result := WriteSharedAnsiString(StringListToString(AvailableUsers,
       lpDelimiter), lpAvailableUsers, uBufferMaxSize);
+  finally
+    AvailableUsers.Free;
+  end;
+end;
+
+(* Retrieve all Windows users that can use Code::Blocks in this system. *)
+function CodeBlocksGetAvailableUsersW(const lpDelimiter: AnsiChar;
+  lpAvailableUsers: PWideChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
+var
+  AvailableUsers: TStringList;
+
+begin
+  AvailableUsers := TStringList.Create;
+  try
+    GetCodeBlocksAvailableUsers(AvailableUsers);
+    // Result := WriteSharedWideString('xxxx_'#$04C5'_x_'#$30BA'_xx_'#$30A1'_xxxxxB'#$1F00'o'#$0100'__|', lpAvailableUsers, uBufferMaxSize);
+    Result := WriteSharedWideString(StringListToString(AvailableUsers, lpDelimiter), lpAvailableUsers, uBufferMaxSize);
   finally
     AvailableUsers.Free;
   end;
@@ -140,6 +145,14 @@ procedure CodeBlocksInitializeProfilesA; stdcall;
 begin
   InitializeCodeBlocksProfiles;
 end;
+
+exports
+  CodeBlocksDetectInstallationPathA,
+  CodeBlocksDetectVersionA,
+  CodeBlocksGetAvailableUsersA,
+  CodeBlocksGetAvailableUsersW,
+  CodeBlocksInitializeProfilesA,
+  CodeBlocksRemoveProfilesA;
 
 end.
 
