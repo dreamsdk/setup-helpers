@@ -47,17 +47,19 @@ end;
 #include "../../../setup-generator/src/inc/utils/utils.iss"
 #include "../../../setup-generator/src/inc/helpers/helperlib.iss"
 
+(*
 procedure GetMessage(Buffer: AnsiString; BufSize: Integer);
   external 'GetMessage@files:common.dll stdcall';
 
 procedure GetMessageW(Buffer: string; BufSize: Integer);
  external 'GetMessageW@files:common.dll stdcall';
+*)
 
 function InitializeSetup(): Boolean;
 var
   AvailableUsers: TArrayOfString;
   i: Integer;
-  Buffer: AnsiString;
+//  Buffer: AnsiString;
   BufferW: string;
   
 begin
@@ -72,6 +74,7 @@ begin
     MsgBox(BufferW, mbError, MB_OK);
   end;
 
+(*
 
   // Allouer un buffer de 256 caractères Unicode
   SetLength(Buffer, 256);
@@ -85,6 +88,7 @@ begin
   // MsgBox('ドリームキャスト❤️', mbInformation, MB_OK);
   // MsgBox(Buffer, mbInformation, MB_OK);
   MsgBox(BufferW, mbInformation, MB_OK);
+*)
 end;
 
 function InitializeUninstall(): Boolean;
