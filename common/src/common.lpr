@@ -1,3 +1,8 @@
+(*
+  This library is a library helper for DreamSDK Setup.
+  This *MUST* be compiled in *RELEASE* mode. If not, the library couldn't be
+  loaded in Inno Setup.
+*)
 library Common;
 
 {$mode objfpc}{$H+}

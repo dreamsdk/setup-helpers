@@ -1,4 +1,9 @@
-library DreamSDK;
+(*
+  This library is a library helper for DreamSDK Setup.
+  This *MUST* be compiled in *RELEASE* mode. If not, the library couldn't be
+  loaded in Inno Setup.
+*)
+library CBHelper;
 
 {$mode objfpc}{$H+}
 
@@ -19,23 +24,6 @@ uses
 {$R *.res}
 
 (* Retrieve all Windows users that can use Code::Blocks in this system. *)
-function CodeBlocksGetAvailableUsersA(const lpDelimiter: AnsiChar;
-  lpAvailableUsers: PAnsiChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
-var
-  AvailableUsers: TStringList;
-
-begin
-  AvailableUsers := TStringList.Create;
-  try
-    GetCodeBlocksAvailableUsers(AvailableUsers);
-    Result := WriteSharedAnsiString(StringListToString(AvailableUsers,
-      lpDelimiter), lpAvailableUsers, uBufferMaxSize);
-  finally
-    AvailableUsers.Free;
-  end;
-end;
-
-(* Retrieve all Windows users that can use Code::Blocks in this system. *)
 function CodeBlocksGetAvailableUsersW(const lpDelimiter: AnsiChar;
   lpAvailableUsers: PWideChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
 var
@@ -45,15 +33,15 @@ begin
   AvailableUsers := TStringList.Create;
   try
     GetCodeBlocksAvailableUsers(AvailableUsers);
-    // Result := WriteSharedWideString('xxxx_'#$04C5'_x_'#$30BA'_xx_'#$30A1'_xxxxxB'#$1F00'o'#$0100'__|', lpAvailableUsers, uBufferMaxSize);
-    Result := WriteSharedWideString(StringListToString(AvailableUsers, lpDelimiter), lpAvailableUsers, uBufferMaxSize);
+    Result := WriteSharedWideString(StringListToString(AvailableUsers,
+      lpDelimiter), lpAvailableUsers, uBufferMaxSize);
   finally
     AvailableUsers.Free;
   end;
 end;
 
 (* Remove all DreamSDK references from Code::Blocks profiles. *)
-function CodeBlocksRemoveProfilesA: Boolean; stdcall;
+function CodeBlocksRemoveProfiles: Boolean; stdcall;
 var
   CodeBlocksPatcher: TCodeBlocksPatcher;
 
@@ -67,7 +55,7 @@ begin
 end;
 
 (* Retrieve the Code::Blocks installation path. *)
-function CodeBlocksDetectInstallationPathA(lpInstallationPath: PAnsiChar;
+function CodeBlocksDetectInstallationPathW(lpInstallationPath: PWideChar;
   const uBufferMaxSize: UInt32): UInt32; stdcall;
 type
   TInnoSetupTranslation = record
@@ -125,34 +113,33 @@ begin
     end;
   end;
 
-  Result := WriteSharedAnsiString(InstallationDirectory, lpInstallationPath,
+  Result := WriteSharedWideString(InstallationDirectory, lpInstallationPath,
     uBufferMaxSize);
 end;
 
 (* Retrieve the Code::Blocks version in the installation path. *)
-function CodeBlocksDetectVersionA(const lpCodeBlocksInstallationDirectory: PAnsiChar;
-  lpCodeBlockVersion: PAnsiChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
+function CodeBlocksDetectVersionW(const lpCodeBlocksInstallationDirectory: PWideChar;
+  lpCodeBlockVersion: PWideChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
 var
   CodeBlocksVersion: TCodeBlocksVersion;
 
 begin
   CodeBlocksVersion := GetCodeBlocksVersion(lpCodeBlocksInstallationDirectory);
-  Result := WriteSharedAnsiString(CodeBlocksVersionToString(CodeBlocksVersion),
+  Result := WriteSharedWideString(CodeBlocksVersionToString(CodeBlocksVersion),
     lpCodeBlockVersion, uBufferMaxSize);
 end;
 
-procedure CodeBlocksInitializeProfilesA; stdcall;
+procedure CodeBlocksInitializeProfiles; stdcall;
 begin
-  InitializeCodeBlocksProfiles;
+  CBTools.InitializeCodeBlocksProfiles;
 end;
 
 exports
-  CodeBlocksDetectInstallationPathA,
-  CodeBlocksDetectVersionA,
-  CodeBlocksGetAvailableUsersA,
+  CodeBlocksDetectInstallationPathW,
+  CodeBlocksDetectVersionW,
   CodeBlocksGetAvailableUsersW,
-  CodeBlocksInitializeProfilesA,
-  CodeBlocksRemoveProfilesA;
+  CodeBlocksInitializeProfiles,
+  CodeBlocksRemoveProfiles;
 
 end.
 
