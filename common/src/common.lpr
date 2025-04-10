@@ -12,6 +12,7 @@ uses
   SysUtils,
   Classes,
   SysTools,
+  StrTools,
   FSTools,
   PEUtils,
   SetupHlp,

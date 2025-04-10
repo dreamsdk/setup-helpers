@@ -13,6 +13,7 @@ uses
   Classes,
   LazUTF8,
   SysTools,
+  StrTools,
   FSTools,
   PEUtils,
   WTTools,
@@ -27,16 +28,20 @@ uses
 function CodeBlocksGetAvailableUsersW(const lpDelimiter: AnsiChar;
   lpAvailableUsers: PWideChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
 var
-  AvailableUsers: TStringList;
+  Buffer: TStringList;
+  AvailableUsers: TWindowsUserAccountInformationArray;
+  i: Integer;
 
 begin
-  AvailableUsers := TStringList.Create;
+  Buffer := TStringList.Create;
   try
     GetCodeBlocksAvailableUsers(AvailableUsers);
-    Result := WriteSharedWideString(StringListToString(AvailableUsers,
+    for i := 0 to Length(AvailableUsers) - 1 do
+      Buffer.Add(AvailableUsers[i].FriendlyName);
+    Result := WriteSharedWideString(StringListToString(Buffer,
       lpDelimiter), lpAvailableUsers, uBufferMaxSize);
   finally
-    AvailableUsers.Free;
+    Buffer.Free;
   end;
 end;
 
