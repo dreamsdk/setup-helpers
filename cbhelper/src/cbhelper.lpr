@@ -20,6 +20,7 @@ uses
   SetupHlp,
   Version,
   CBTools,
+  CBVerInf,
   CBPatch;
 
 {$R *.res}
