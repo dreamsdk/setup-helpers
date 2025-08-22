@@ -21,7 +21,7 @@ begin
 
   for i := 0 to Length(CodeBlocksUsers) - 1 do
   begin
-    WriteLn(CodeBlocksUsers[i].FullName, ' (', CodeBlocksUsers[i].UserName, ')');
+    WriteLn(CodeBlocksUsers[i].FriendlyName);
   end;
 
   WriteLn('******************************************************************', sLineBreak);
