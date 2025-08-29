@@ -46,13 +46,8 @@ end;
 
 function RenameFileOrDirectoryAsBackupW(
   const OldDirectoryFullPath: PWideChar): Boolean; stdcall;
-var
-  NewDirectoryFullPath: TFileName;
-
 begin
-  NewDirectoryFullPath := Default(string);
-  Result := RenameFileOrDirectoryAsBackup(OldDirectoryFullPath,
-    NewDirectoryFullPath);
+  Result := RenameFileOrDirectoryAsBackup(OldDirectoryFullPath);
 end;
 
 function GetPortableExecutableBitnessW(
