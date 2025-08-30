@@ -47,7 +47,7 @@ end;
 function RenameFileOrDirectoryAsBackupW(
   const OldDirectoryFullPath: PWideChar): Boolean; stdcall;
 begin
-  Result := RenameFileOrDirectoryAsBackup(OldDirectoryFullPath);
+  Result := RenameFileOrDirectoryAsBackup(OldDirectoryFullPath) = rfdbSuccess;
 end;
 
 function GetPortableExecutableBitnessW(
