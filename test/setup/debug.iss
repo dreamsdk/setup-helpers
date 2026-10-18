@@ -28,6 +28,16 @@ SolidCompression=yes
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[CustomMessages]
+; Copied from setup-generator (labels.iss), used by postinst.iss
+PostInstallTitle=Finalizing the installation
+PostInstallDescription=Please wait while Setup installs KallistiOS, KallistiOS Ports and Dreamcast Tool. This may take a while.
+PostInstallAbortButton=&Abort
+PostInstallAbortConfirmation=Do you really want to abort?%nKallistiOS, KallistiOS Ports and Dreamcast Tool won't be fully installed, but you will be able to install them later from DreamSDK Manager.
+PostInstallCloseButton=&Close
+PostInstallFailedStatus=Operation terminated with errors.
+PostInstallAbortedStatus=Operation aborted.
+
 [Code]
 
 
@@ -44,6 +54,37 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 #include "../../../setup-generator/src/inc/global.iss"
 #include "../../../setup-generator/src/inc/paths/targets.iss"
 #include "../../../setup-generator/src/inc/helpers/helperlib.iss"
+#include "../../../setup-generator/src/inc/helpers/postinst.iss"
+
+(*
+  Post-install helper test: run this setup with /POSTINST="<home-dir>", e.g.:
+    setup.exe /POSTINST="C:\DreamSDK"
+  then click on the Install button of the Ready page.
+  WARNING: this executes the real post-install, i.e., the existing KallistiOS,
+  KallistiOS Ports and Dreamcast Tool directories are renamed as backups then
+  everything is cloned and built again. Use it on a test installation only.
+*)
+function GetPostInstallDebugHomeDirectory(): String;
+begin
+  Result := ExpandConstant('{param:POSTINST|}');
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  Status: Cardinal;
+
+begin
+  Result := True;
+  if (CurPageID = wpReady) and (GetPostInstallDebugHomeDirectory() <> '') then
+  begin
+    Status := RunPostInstallHelper(GetPostInstallDebugHomeDirectory());
+    MsgBox(Format('RunPostInstallHelper: %d (0: Unavailable, 2: Succeeded, 3: Failed, 4: Aborted)'
+      + #13#10 + 'Log file: %s', [Status,
+      GetPostInstallLogFileName(GetPostInstallDebugHomeDirectory())]),
+      mbInformation, MB_OK);
+    Result := False; // Debug script: never actually install anything
+  end;
+end;
 
 (*
 procedure GetMessage(Buffer: AnsiString; BufSize: Integer);
@@ -68,6 +109,10 @@ var
 begin
   Result := True;
   SetUninstallMode(False);
+
+  // Post-install helper test: just display the wizard
+  if GetPostInstallDebugHomeDirectory() <> '' then
+    Exit;
 
   BufferW := '';
 
