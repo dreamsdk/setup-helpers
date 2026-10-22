@@ -19,7 +19,7 @@
       <UseVersionInfo Value="True" />
       <AutoIncrementBuild Value="True" />
       <MajorVersionNr Value="1" />
-      <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Post-install Helper for DreamSDK Setup" InternalName="postinst.dll" LegalCopyright="© Copyleft 2018-2025" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="postinst.dll" ProductName="DreamSDK" ProductVersion="4.0.11.2508" />
+      <StringTable Comments="https://dreamsdk.org/" CompanyName="The DreamSDK Team" FileDescription="Post-install Helper for DreamSDK Setup" InternalName="postinst.dll" LegalCopyright="© Copyleft 2018-2026" LegalTrademarks="Sega and Dreamcast are registered trademark of Sega Games Co., Ltd." OriginalFilename="postinst.dll" ProductName="DreamSDK" ProductVersion="4.1.13.2610" />
     </VersionInfo>
     <BuildModes Count="2">
       <Item1 Name="Debug" Default="True" />
