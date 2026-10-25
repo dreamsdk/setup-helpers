@@ -8,6 +8,10 @@ valid **DreamSDK** installation packages.
 The `cbhelper` binary is used for helping the **DreamSDK Setup** detecting the
 **Code::Blocks** installation on the user's computer.
 
+The `vshelper` binary is used by the **DreamSDK Setup** for detecting
+**Visual Studio Code** and installing/removing the **DreamSDK** extension
+(`dreamsdk.vsix`) for all the Windows user profiles.
+
 The `pecheck` binary returns a string (i.e., `32-bit` or `64-bit`) representing
 the platform architecture for the target binary passed in parameter.
 
