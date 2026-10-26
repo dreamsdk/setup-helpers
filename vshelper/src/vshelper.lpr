@@ -25,6 +25,19 @@ uses
 var
   LastErrorMessage: string = '';
 
+procedure LogException(const RoutineName: string; E: Exception);
+var
+  LogContext: TLogMessageContext;
+
+begin
+  LogContext := LogMessageEnter({$I %FILE%}, RoutineName);
+  try
+    LogMessage(LogContext, Format('Exception: %s: %s', [E.ClassName, E.Message]));
+  finally
+    LogMessageExit(LogContext);
+  end;
+end;
+
 (* Convert the list of users to a delimiter-separated list. *)
 function UsersToString(const Users: TWindowsUserAccountInformationArray;
   const Delimiter: AnsiChar): string;
@@ -58,9 +71,15 @@ var
   Installation: TVisualStudioCodeInstallation;
 
 begin
-  GetVisualStudioCodeInstallation(EditorIdToString(lpEditorId), Installation);
-  Result := WriteSharedWideString(Installation.CommandLineInterface,
-    lpCommandLineInterface, uBufferMaxSize);
+  Result := 0;
+  try
+    GetVisualStudioCodeInstallation(EditorIdToString(lpEditorId), Installation);
+    Result := WriteSharedWideString(Installation.CommandLineInterface,
+      lpCommandLineInterface, uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 (* Retrieve the version of the most recent installation of an editor. *)
@@ -70,9 +89,15 @@ var
   Installation: TVisualStudioCodeInstallation;
 
 begin
-  GetVisualStudioCodeInstallation(EditorIdToString(lpEditorId), Installation);
-  Result := WriteSharedWideString(Installation.Version, lpVersion,
-    uBufferMaxSize);
+  Result := 0;
+  try
+    GetVisualStudioCodeInstallation(EditorIdToString(lpEditorId), Installation);
+    Result := WriteSharedWideString(Installation.Version, lpVersion,
+      uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 (* Retrieve all Windows users that will receive the extension. *)
@@ -82,9 +107,15 @@ var
   AvailableUsers: TWindowsUserAccountInformationArray;
 
 begin
-  GetVisualStudioCodeAvailableUsers(AvailableUsers);
-  Result := WriteSharedWideString(UsersToString(AvailableUsers, lpDelimiter),
-    lpAvailableUsers, uBufferMaxSize);
+  Result := 0;
+  try
+    GetVisualStudioCodeAvailableUsers(AvailableUsers);
+    Result := WriteSharedWideString(UsersToString(AvailableUsers, lpDelimiter),
+      lpAvailableUsers, uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 (* Retrieve all Windows users that have the extension installed in an editor. *)
@@ -95,25 +126,49 @@ var
   InstalledUsers: TWindowsUserAccountInformationArray;
 
 begin
-  GetVisualStudioCodeInstalledUsers(EditorIdToString(lpEditorId),
-    VSCODE_DREAMSDK_EXTENSION_ID, InstalledUsers);
-  Result := WriteSharedWideString(UsersToString(InstalledUsers, lpDelimiter),
-    lpInstalledUsers, uBufferMaxSize);
+  Result := 0;
+  try
+    GetVisualStudioCodeInstalledUsers(EditorIdToString(lpEditorId),
+      VSCODE_DREAMSDK_EXTENSION_ID, InstalledUsers);
+    Result := WriteSharedWideString(UsersToString(InstalledUsers, lpDelimiter),
+      lpInstalledUsers, uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 (* Install the extension (.vsix) in an editor for all the Windows users. *)
 function VSCodeInstallExtensionW(const lpEditorId: PWideChar;
   const lpVsixFileName: PWideChar): Boolean; stdcall;
 begin
-  Result := VisualStudioCodeInstallExtension(EditorIdToString(lpEditorId),
-    UTF16ToUTF8(UnicodeString(lpVsixFileName)), LastErrorMessage);
+  Result := False;
+  try
+    Result := VisualStudioCodeInstallExtension(EditorIdToString(lpEditorId),
+      UTF16ToUTF8(UnicodeString(lpVsixFileName)), LastErrorMessage);
+  except
+    on E: Exception do
+    begin
+      LastErrorMessage := E.Message;
+      LogException({$I %CURRENTROUTINE%}, E);
+    end;
+  end;
 end;
 
 (* Remove the extension from an editor for all the Windows users. *)
 function VSCodeRemoveExtensionW(const lpEditorId: PWideChar): Boolean; stdcall;
 begin
-  Result := VisualStudioCodeUninstallExtension(EditorIdToString(lpEditorId),
-    VSCODE_DREAMSDK_EXTENSION_ID, LastErrorMessage);
+  Result := False;
+  try
+    Result := VisualStudioCodeUninstallExtension(EditorIdToString(lpEditorId),
+      VSCODE_DREAMSDK_EXTENSION_ID, LastErrorMessage);
+  except
+    on E: Exception do
+    begin
+      LastErrorMessage := E.Message;
+      LogException({$I %CURRENTROUTINE%}, E);
+    end;
+  end;
 end;
 
 (* Save the users that have the extension installed in an editor, in the
@@ -126,13 +181,19 @@ var
   InstalledUsers: TStringList;
 
 begin
-  InstalledUsers := TStringList.Create;
+  Result := False;
   try
-    Result := RefreshVisualStudioCodeInstalledUsers(EditorIdToString(lpEditorId),
-      VSCODE_DREAMSDK_EXTENSION_ID, UTF16ToUTF8(UnicodeString(lpConfigurationFileName)),
-      InstalledUsers);
-  finally
-    InstalledUsers.Free;
+    InstalledUsers := TStringList.Create;
+    try
+      Result := RefreshVisualStudioCodeInstalledUsers(EditorIdToString(lpEditorId),
+        VSCODE_DREAMSDK_EXTENSION_ID, UTF16ToUTF8(UnicodeString(lpConfigurationFileName)),
+        InstalledUsers);
+    finally
+      InstalledUsers.Free;
+    end;
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
   end;
 end;
 
@@ -140,8 +201,14 @@ end;
 function VSCodeGetLastErrorW(lpErrorMessage: PWideChar;
   const uBufferMaxSize: UInt32): UInt32; stdcall;
 begin
-  Result := WriteSharedWideString(LastErrorMessage, lpErrorMessage,
-    uBufferMaxSize);
+  Result := 0;
+  try
+    Result := WriteSharedWideString(LastErrorMessage, lpErrorMessage,
+      uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 exports

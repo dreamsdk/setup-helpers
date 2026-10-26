@@ -25,6 +25,19 @@ uses
 
 {$R *.res}
 
+procedure LogException(const RoutineName: string; E: Exception);
+var
+  LogContext: TLogMessageContext;
+
+begin
+  LogContext := LogMessageEnter({$I %FILE%}, RoutineName);
+  try
+    LogMessage(LogContext, Format('Exception: %s: %s', [E.ClassName, E.Message]));
+  finally
+    LogMessageExit(LogContext);
+  end;
+end;
+
 (* Retrieve all Windows users that can use Code::Blocks in this system. *)
 function CodeBlocksGetAvailableUsersW(const lpDelimiter: AnsiChar;
   lpAvailableUsers: PWideChar; const uBufferMaxSize: UInt32): UInt32; stdcall;
@@ -34,15 +47,21 @@ var
   i: Integer;
 
 begin
-  Buffer := TStringList.Create;
+  Result := 0;
   try
-    GetCodeBlocksAvailableUsers(AvailableUsers);
-    for i := 0 to Length(AvailableUsers) - 1 do
-      Buffer.Add(AvailableUsers[i].FriendlyName);
-    Result := WriteSharedWideString(StringListToString(Buffer,
-      lpDelimiter), lpAvailableUsers, uBufferMaxSize);
-  finally
-    Buffer.Free;
+    Buffer := TStringList.Create;
+    try
+      GetCodeBlocksAvailableUsers(AvailableUsers);
+      for i := 0 to Length(AvailableUsers) - 1 do
+        Buffer.Add(AvailableUsers[i].FriendlyName);
+      Result := WriteSharedWideString(StringListToString(Buffer,
+        lpDelimiter), lpAvailableUsers, uBufferMaxSize);
+    finally
+      Buffer.Free;
+    end;
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
   end;
 end;
 
@@ -52,11 +71,17 @@ var
   CodeBlocksPatcher: TCodeBlocksPatcher;
 
 begin
-  CodeBlocksPatcher := TCodeBlocksPatcher.Create;
+  Result := False;
   try
-    Result := CodeBlocksPatcher.ResetProfiles;
-  finally
-    CodeBlocksPatcher.Free;
+    CodeBlocksPatcher := TCodeBlocksPatcher.Create;
+    try
+      Result := CodeBlocksPatcher.ResetProfiles;
+    finally
+      CodeBlocksPatcher.Free;
+    end;
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
   end;
 end;
 
@@ -86,41 +111,47 @@ var
   InnoSetupTranslation: TInnoSetupTranslation;
 
 begin
-  InstallationDirectory := GetCodeBlocksDefaultInstallationDirectory;
+  Result := 0;
+  try
+    InstallationDirectory := GetCodeBlocksDefaultInstallationDirectory;
 {$IFDEF DEBUG}
-  WriteLn('InstallationDirectory: ', InstallationDirectory);
+    WriteLn('InstallationDirectory: ', InstallationDirectory);
 {$ENDIF}
-  for i := Low(DIRECTORIES) to High(DIRECTORIES) do
-  begin
-    InnoSetupTranslation := DIRECTORIES[i];
-    if ((InnoSetupTranslation.Is64BitOnly and IsWindows64)
-      or (not InnoSetupTranslation.Is64BitOnly and not IsWindows64)) then
+    for i := Low(DIRECTORIES) to High(DIRECTORIES) do
     begin
-      EnvironmentVariable := InnoSetupTranslation.EnvironmentVariable;
-      InnoSetupVariable := InnoSetupTranslation.InnoSetupVariable;
-{$IFDEF DEBUG}
-      WriteLn(EnvironmentVariable, ' => ', InnoSetupVariable);
-{$ENDIF}
-      if IsInString(EnvironmentVariable, InstallationDirectory) then
+      InnoSetupTranslation := DIRECTORIES[i];
+      if ((InnoSetupTranslation.Is64BitOnly and IsWindows64)
+        or (not InnoSetupTranslation.Is64BitOnly and not IsWindows64)) then
       begin
+        EnvironmentVariable := InnoSetupTranslation.EnvironmentVariable;
+        InnoSetupVariable := InnoSetupTranslation.InnoSetupVariable;
 {$IFDEF DEBUG}
-        WriteLn('  Before: ', InstallationDirectory);
+        WriteLn(EnvironmentVariable, ' => ', InnoSetupVariable);
 {$ENDIF}
-        InstallationDirectory := StringReplace(
-          InstallationDirectory,
-          EnvironmentVariable,
-          InnoSetupVariable,
-          [rfReplaceAll, rfIgnoreCase]
-        );
+        if IsInString(EnvironmentVariable, InstallationDirectory) then
+        begin
 {$IFDEF DEBUG}
-        WriteLn('  After: ', InstallationDirectory);
+          WriteLn('  Before: ', InstallationDirectory);
 {$ENDIF}
+          InstallationDirectory := StringReplace(
+            InstallationDirectory,
+            EnvironmentVariable,
+            InnoSetupVariable,
+            [rfReplaceAll, rfIgnoreCase]
+          );
+{$IFDEF DEBUG}
+          WriteLn('  After: ', InstallationDirectory);
+{$ENDIF}
+        end;
       end;
     end;
-  end;
 
-  Result := WriteSharedWideString(InstallationDirectory, lpInstallationPath,
-    uBufferMaxSize);
+    Result := WriteSharedWideString(InstallationDirectory, lpInstallationPath,
+      uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 (* Retrieve the Code::Blocks version in the installation path. *)
@@ -130,14 +161,25 @@ var
   CodeBlocksVersion: TCodeBlocksVersion;
 
 begin
-  CodeBlocksVersion := GetCodeBlocksVersion(lpCodeBlocksInstallationDirectory);
-  Result := WriteSharedWideString(CodeBlocksVersionToString(CodeBlocksVersion),
-    lpCodeBlockVersion, uBufferMaxSize);
+  Result := 0;
+  try
+    CodeBlocksVersion := GetCodeBlocksVersion(lpCodeBlocksInstallationDirectory);
+    Result := WriteSharedWideString(CodeBlocksVersionToString(CodeBlocksVersion),
+      lpCodeBlockVersion, uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 procedure CodeBlocksInitializeProfiles; stdcall;
 begin
-  CBTools.InitializeCodeBlocksProfiles;
+  try
+    CBTools.InitializeCodeBlocksProfiles;
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 exports

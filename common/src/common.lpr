@@ -20,9 +20,28 @@ uses
 
 {$R *.res}
 
+procedure LogException(const RoutineName: string; E: Exception);
+var
+  LogContext: TLogMessageContext;
+
+begin
+  LogContext := LogMessageEnter({$I %FILE%}, RoutineName);
+  try
+    LogMessage(LogContext, Format('Exception: %s: %s', [E.ClassName, E.Message]));
+  finally
+    LogMessageExit(LogContext);
+  end;
+end;
+
 function IsWindowsTerminalInstalled: Boolean; stdcall;
 begin
-  Result := WTTools.IsWindowsTerminalInstalled;
+  Result := False;
+  try
+    Result := WTTools.IsWindowsTerminalInstalled;
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 function GetFileLocationsInSystemPathW(const lpFileName: PWideChar;
@@ -33,21 +52,32 @@ var
 
 begin
   Result := 0;
-  PathFileNames := TStringList.Create;
   try
-    if GetFileLocationsInSystemPath(lpFileName, PathFileNames) then
-      Result := WriteSharedWideString(
-        StringListToString(PathFileNames, lpDelimiter), lpPathFileNames,
-        uBufferMaxSize);
-  finally
-    PathFileNames.Free;
+    PathFileNames := TStringList.Create;
+    try
+      if GetFileLocationsInSystemPath(lpFileName, PathFileNames) then
+        Result := WriteSharedWideString(
+          StringListToString(PathFileNames, lpDelimiter), lpPathFileNames,
+          uBufferMaxSize);
+    finally
+      PathFileNames.Free;
+    end;
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
   end;
 end;
 
 function RenameFileOrDirectoryAsBackupW(
   const OldDirectoryFullPath: PWideChar): Boolean; stdcall;
 begin
-  Result := RenameFileOrDirectoryAsBackup(OldDirectoryFullPath) = rfdbSuccess;
+  Result := False;
+  try
+    Result := RenameFileOrDirectoryAsBackup(OldDirectoryFullPath) = rfdbSuccess;
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 function GetPortableExecutableBitnessW(
@@ -56,10 +86,16 @@ var
   Bitness: TPortableExecutableBitness;
 
 begin
-  Bitness := pebUnknown;
-  if FileExists(FileName) then
-    Bitness := GetPortableExecutableBitness(FileName);
-  Result := Ord(Bitness);
+  Result := Ord(pebUnknown);
+  try
+    Bitness := pebUnknown;
+    if FileExists(FileName) then
+      Bitness := GetPortableExecutableBitness(FileName);
+    Result := Ord(Bitness);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
 end;
 
 exports
