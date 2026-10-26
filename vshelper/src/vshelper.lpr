@@ -25,11 +25,14 @@ uses
 var
   LastErrorMessage: string = '';
 
+(* Log an exception caught in an export and keep its message, so Setup can
+   retrieve it. *)
 procedure LogException(const RoutineName: string; E: Exception);
 var
   LogContext: TLogMessageContext;
 
 begin
+  LastErrorMessage := E.Message;
   LogContext := LogMessageEnter({$I %FILE%}, RoutineName);
   try
     LogMessage(LogContext, Format('Exception: %s: %s', [E.ClassName, E.Message]));
@@ -148,10 +151,7 @@ begin
       UTF16ToUTF8(UnicodeString(lpVsixFileName)), LastErrorMessage);
   except
     on E: Exception do
-    begin
-      LastErrorMessage := E.Message;
       LogException({$I %CURRENTROUTINE%}, E);
-    end;
   end;
 end;
 
@@ -164,10 +164,7 @@ begin
       VSCODE_DREAMSDK_EXTENSION_ID, LastErrorMessage);
   except
     on E: Exception do
-    begin
-      LastErrorMessage := E.Message;
       LogException({$I %CURRENTROUTINE%}, E);
-    end;
   end;
 end;
 
@@ -197,7 +194,8 @@ begin
   end;
 end;
 
-(* Retrieve the error message of the last install/remove operation. *)
+(* Retrieve the error message of the last install/remove operation, or of the
+   last exception caught in this library. *)
 function VSCodeGetLastErrorW(lpErrorMessage: PWideChar;
   const uBufferMaxSize: UInt32): UInt32; stdcall;
 begin

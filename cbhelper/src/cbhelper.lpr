@@ -25,11 +25,17 @@ uses
 
 {$R *.res}
 
+var
+  LastErrorMessage: string = '';
+
+(* Log an exception caught in an export and keep its message, so Setup can
+   retrieve it. *)
 procedure LogException(const RoutineName: string; E: Exception);
 var
   LogContext: TLogMessageContext;
 
 begin
+  LastErrorMessage := E.Message;
   LogContext := LogMessageEnter({$I %FILE%}, RoutineName);
   try
     LogMessage(LogContext, Format('Exception: %s: %s', [E.ClassName, E.Message]));
@@ -182,12 +188,34 @@ begin
   end;
 end;
 
+(* Retrieve the message of the last exception caught in this library, then
+   clear it; empty if there was no exception since the last call. Call it when
+   an export returns its failure value (e.g., False or 0). *)
+function CodeBlocksGetLastErrorW(lpErrorMessage: PWideChar;
+  const uBufferMaxSize: UInt32): UInt32; stdcall;
+var
+  ErrorMessage: string;
+
+begin
+  Result := 0;
+  try
+    ErrorMessage := LastErrorMessage;
+    LastErrorMessage := '';
+    Result := WriteSharedWideString(ErrorMessage, lpErrorMessage,
+      uBufferMaxSize);
+  except
+    on E: Exception do
+      LogException({$I %CURRENTROUTINE%}, E);
+  end;
+end;
+
 exports
   CodeBlocksDetectInstallationPathW,
   CodeBlocksDetectVersionW,
   CodeBlocksGetAvailableUsersW,
   CodeBlocksInitializeProfiles,
-  CodeBlocksRemoveProfiles;
+  CodeBlocksRemoveProfiles,
+  CodeBlocksGetLastErrorW;
 
 end.
 
