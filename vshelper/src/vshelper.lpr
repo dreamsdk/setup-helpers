@@ -116,6 +116,26 @@ begin
     VSCODE_DREAMSDK_EXTENSION_ID, LastErrorMessage);
 end;
 
+(* Save the users that have the extension installed in an editor, in the
+   DreamSDK IDE configuration file (ide.conf). DreamSDK Manager can't read the
+   profiles of the other users when not elevated, so it uses this list. Must be
+   called elevated (i.e., from DreamSDK Setup), so all the profiles are read. *)
+function VSCodeRefreshInstalledUsersW(const lpEditorId: PWideChar;
+  const lpConfigurationFileName: PWideChar): Boolean; stdcall;
+var
+  InstalledUsers: TStringList;
+
+begin
+  InstalledUsers := TStringList.Create;
+  try
+    Result := RefreshVisualStudioCodeInstalledUsers(EditorIdToString(lpEditorId),
+      VSCODE_DREAMSDK_EXTENSION_ID, UTF16ToUTF8(UnicodeString(lpConfigurationFileName)),
+      InstalledUsers);
+  finally
+    InstalledUsers.Free;
+  end;
+end;
+
 (* Retrieve the error message of the last install/remove operation. *)
 function VSCodeGetLastErrorW(lpErrorMessage: PWideChar;
   const uBufferMaxSize: UInt32): UInt32; stdcall;
@@ -131,6 +151,7 @@ exports
   VSCodeGetInstalledUsersW,
   VSCodeInstallExtensionW,
   VSCodeRemoveExtensionW,
+  VSCodeRefreshInstalledUsersW,
   VSCodeGetLastErrorW;
 
 end.
